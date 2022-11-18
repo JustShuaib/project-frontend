@@ -13,10 +13,12 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Eye, EyeClose } from "../icons";
 import { Link, Page } from "../components";
+// import { useCustomToast as toast } from "../utils/toast";
 interface FormData {
   username: string;
   email: string;
@@ -25,26 +27,71 @@ interface FormData {
 }
 const SignUp = () => {
   const [show, setShow] = useState({ pWord: false, cpWord: false });
-
+  const toast = useToast();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
     getValues,
   } = useForm<FormData>();
   const password = getValues("password");
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const res = await fetch("https://e-commerce-66n3.onrender.com/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    const json = await res.json();
-    console.log(json);
-    reset();
-    setShow({ pWord: false, cpWord: false });
+    try {
+      const res = await fetch("https://e-commerce-66n3.onrender.com/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const d = await res.json();
+      console.log("TRY RESULT");
+      console.log(d);
+      if (res.status === 201) {
+        toast({
+          title: "Account created.",
+          description: "We've created your account for you.",
+          status: "success",
+          position: "top-right",
+          duration: 3000,
+          isClosable: true,
+        });
+        reset();
+        setShow({ pWord: false, cpWord: false });
+      } else {
+        toast({
+          title: "An error occurred.",
+          description: "We were unable to create your account.",
+          status: "error",
+          position: "top-right",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error: any) {
+      console.log("CATCH RESULT");
+      console.log(error);
+
+      if (error?.message === "Failed to fetch") {
+        toast({
+          title: "Network error.",
+          description: "Please check your internet connection.",
+          status: "error",
+          position: "top-right",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "An error occurred.",
+          description: "Please try again.",
+          status: "error",
+          position: "top-right",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    }
   };
   return (
     <Page title="Sign up">
@@ -54,6 +101,7 @@ const SignUp = () => {
 
         <Container
           as="form"
+          mt={4}
           maxW="container.sm"
           onSubmit={handleSubmit(onSubmit)}
         >
@@ -135,7 +183,7 @@ const SignUp = () => {
             </FormControl>
 
             <FormControl isInvalid={Boolean(errors.confirm_password)}>
-              <FormLabel htmlFor="confirmPassword">Password</FormLabel>
+              <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
               <InputGroup>
                 <Input
                   id="confirmPassword"
@@ -165,10 +213,10 @@ const SignUp = () => {
               </FormErrorMessage>
             </FormControl>
           </Flex>
-          <Button type="submit" w="full" mt={4}>
+          <Button type="submit" w="full" my={4} isLoading={isSubmitting}>
             Sign Up
           </Button>
-          <Text>
+          <Text fontSize="sm">
             Already have an account? <Link href="/login">Login</Link>
           </Text>
         </Container>

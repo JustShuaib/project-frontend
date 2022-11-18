@@ -1,8 +1,16 @@
 import type { AppProps } from "next/app";
-import { Open_Sans } from "@next/font/google";
+import { Open_Sans, Libre_Franklin } from "@next/font/google";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 const openSans = Open_Sans();
+const libreFranklin = Libre_Franklin();
 const myTheme = extendTheme({
+  components: {
+    Heading: {
+      baseStyle: {
+        fontFamily: libreFranklin.style.fontFamily,
+      },
+    },
+  },
   styles: {
     global: {
       body: {
