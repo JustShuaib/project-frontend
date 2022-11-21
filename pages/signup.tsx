@@ -18,7 +18,8 @@ import {
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Eye, EyeClose } from "../icons";
 import { Link, Page } from "../components";
-// import { useCustomToast as toast } from "../utils/toast";
+import { BACKEND_URL } from "../utils/urls";
+
 interface FormData {
   username: string;
   email: string;
@@ -27,7 +28,12 @@ interface FormData {
 }
 const SignUp = () => {
   const [show, setShow] = useState({ pWord: false, cpWord: false });
-  const toast = useToast();
+  const toast = useToast({
+    size: "small",
+    position: "top-right",
+    isClosable: true,
+    styleConfig: { fontSize: "12px" },
+  });
   const {
     register,
     handleSubmit,
@@ -39,56 +45,36 @@ const SignUp = () => {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      const res = await fetch("https://e-commerce-66n3.onrender.com/users", {
+      const res = await fetch(`${BACKEND_URL}/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      const d = await res.json();
-      console.log("TRY RESULT");
-      console.log(d);
+      const { detail } = await res.json();
       if (res.status === 201) {
         toast({
-          title: "Account created.",
-          description: "We've created your account for you.",
+          description: detail,
           status: "success",
-          position: "top-right",
-          duration: 3000,
-          isClosable: true,
         });
         reset();
         setShow({ pWord: false, cpWord: false });
       } else {
         toast({
-          title: "An error occurred.",
-          description: "We were unable to create your account.",
+          description: detail,
           status: "error",
-          position: "top-right",
-          duration: 3000,
-          isClosable: true,
         });
       }
     } catch (error: any) {
-      console.log("CATCH RESULT");
       console.log(error);
-
       if (error?.message === "Failed to fetch") {
         toast({
-          title: "Network error.",
           description: "Please check your internet connection.",
           status: "error",
-          position: "top-right",
-          duration: 3000,
-          isClosable: true,
         });
       } else {
         toast({
-          title: "An error occurred.",
           description: "Please try again.",
           status: "error",
-          position: "top-right",
-          duration: 3000,
-          isClosable: true,
         });
       }
     }
@@ -96,7 +82,7 @@ const SignUp = () => {
   return (
     <Page title="Sign up">
       <Box as="main" mt={6}>
-        <Heading textAlign="center">Sign Up</Heading>
+        <Heading>Sign Up</Heading>
         <Text textAlign="center">Sign up on the platform</Text>
 
         <Container
@@ -216,6 +202,7 @@ const SignUp = () => {
           <Button type="submit" w="full" my={4} isLoading={isSubmitting}>
             Sign Up
           </Button>
+
           <Text fontSize="sm">
             Already have an account? <Link href="/login">Login</Link>
           </Text>
