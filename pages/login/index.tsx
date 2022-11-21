@@ -20,7 +20,7 @@ import { Link, Page } from "../../components";
 import { BACKEND_URL } from "../../utils/urls";
 
 interface FormData {
-  username: string;
+  email: string;
   password: string;
 }
 const Login = () => {
@@ -37,26 +37,27 @@ const Login = () => {
     isClosable: true,
     styleConfig: { fontSize: "12px" },
   });
-  const onSubmit: SubmitHandler<FormData> = async ({ username, password }) => {
+  const onSubmit: SubmitHandler<FormData> = async ({ email, password }) => {
     const formData = new FormData();
-    formData.append("username", username);
+    formData.append("username", email);
     formData.append("password", password);
     try {
       const res = await fetch(`${BACKEND_URL}/login`, {
         method: "POST",
         body: formData,
       });
-      const { detail } = await res.json();
+      const data = await res.json();
+      console.log(data);
       if (res.status === 200) {
         toast({
-          description: detail,
+          description: "Logged in successfully",
           status: "success",
         });
         reset();
         setShow(false);
       } else {
         toast({
-          description: detail,
+          description: "Invalid credentials",
           status: "error",
         });
       }
@@ -83,17 +84,21 @@ const Login = () => {
         </Heading>
         <Text textAlign="center">Login into the platform</Text>
         <Container onSubmit={handleSubmit(onSubmit)} as="form">
-          <FormControl isInvalid={Boolean(errors.username)}>
-            <FormLabel htmlFor="username">Username</FormLabel>
+          <FormControl mt={3} isInvalid={Boolean(errors.email)}>
+            <FormLabel htmlFor="email">Email</FormLabel>
             <Input
-              id="username"
-              placeholder="username"
-              {...register("username", {
-                required: "username is required",
+              id="email"
+              placeholder="Email Address"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: "Invalid email address",
+                },
               })}
             />
             <FormErrorMessage>
-              {errors.username && errors.username.message}
+              {errors.email && errors.email.message}
             </FormErrorMessage>
           </FormControl>
 
@@ -120,7 +125,7 @@ const Login = () => {
               {errors.password && errors.password.message}
             </FormErrorMessage>
           </FormControl>
-          <Button mt={4} w="full" isLoading={isSubmitting} type="submit">
+          <Button my={4} w="full" isLoading={isSubmitting} type="submit">
             Login
           </Button>
           <Flex
@@ -129,7 +134,7 @@ const Login = () => {
             align="center"
             justify="space-between"
           >
-            <Text>
+            <Text mb={1}>
               Don&apos;t have an account? <Link href="/signup">Sign up</Link>
             </Text>
             <Link href="/login/forgot-password">Forgot Password?</Link>
