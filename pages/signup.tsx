@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import {
   Box,
@@ -7,7 +8,6 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Heading,
   IconButton,
   Input,
   InputGroup,
@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Eye, EyeClose } from "../icons";
-import { Link, Page } from "../components";
+import { Link, Page, Heading } from "../components";
 import { BACKEND_URL } from "../utils/urls";
 
 interface FormData {
@@ -27,6 +27,7 @@ interface FormData {
   confirm_password: string;
 }
 const SignUp = () => {
+  const router = useRouter();
   const [show, setShow] = useState({ pWord: false, cpWord: false });
   const toast = useToast({
     size: "small",
@@ -55,6 +56,9 @@ const SignUp = () => {
         toast({
           description: detail,
           status: "success",
+          onCloseComplete() {
+            router.replace("/login");
+          },
         });
         reset();
         setShow({ pWord: false, cpWord: false });
@@ -82,7 +86,9 @@ const SignUp = () => {
   return (
     <Page title="Sign up">
       <Box as="main" mt={6}>
-        <Heading>Sign Up</Heading>
+        <Heading as="h1" size="lg">
+          Sign Up
+        </Heading>
         <Text textAlign="center">Sign up on the platform</Text>
 
         <Container

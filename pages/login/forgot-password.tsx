@@ -1,18 +1,18 @@
 import { useRouter } from "next/router";
 import {
+  Box,
   Button,
   Container,
   Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Heading,
   Input,
   Text,
   useToast,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link, Page } from "../../components";
+import { Link, Page, Heading } from "../../components";
 import { BACKEND_URL } from "../../utils/urls";
 
 const ForgotPassword = () => {
@@ -69,8 +69,8 @@ const ForgotPassword = () => {
   };
   return (
     <Page title="Forgot Password">
-      <main>
-        <Heading as="h1" mt={6} mb={2} textAlign="center" size="lg">
+      <Box mt={6}>
+        <Heading as="h1" size="lg">
           Forgot Password
         </Heading>
         <Text textAlign="center" fontSize="sm" px="6">
@@ -99,11 +99,11 @@ const ForgotPassword = () => {
           <Button type="submit" w="full" isLoading={isSubmitting} my={4} py={5}>
             Reset Password
           </Button>
-          <Flex fontSize="sm" justify="center">
-            Already have an account? <Link href="/login">Login</Link>
+          <Flex fontSize="sm" justify="center" gap={1}>
+            Already have an account?<Link href="/login">Login</Link>
           </Flex>
         </Container>
-      </main>
+      </Box>
     </Page>
   );
 };

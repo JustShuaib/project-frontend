@@ -2,7 +2,6 @@ import { useState } from "react";
 import {
   Input,
   Text,
-  Heading,
   Container,
   Button,
   Flex,
@@ -13,10 +12,11 @@ import {
   FormLabel,
   FormErrorMessage,
   useToast,
+  Box,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Eye, EyeClose } from "../../icons";
-import { Link, Page } from "../../components";
+import { Link, Page, Heading } from "../../components";
 import { BACKEND_URL } from "../../utils/urls";
 
 interface FormData {
@@ -57,7 +57,7 @@ const Login = () => {
         setShow(false);
       } else {
         toast({
-          description: "Invalid credentials",
+          description: data?.detail,
           status: "error",
         });
       }
@@ -78,8 +78,8 @@ const Login = () => {
   };
   return (
     <Page title="Login">
-      <main>
-        <Heading as="h1" my={4} size="lg">
+      <Box as="main" mt={6}>
+        <Heading as="h1" size="lg">
           Login
         </Heading>
         <Text textAlign="center">Login into the platform</Text>
@@ -140,7 +140,7 @@ const Login = () => {
             <Link href="/login/forgot-password">Forgot Password?</Link>
           </Flex>
         </Container>
-      </main>
+      </Box>
     </Page>
   );
 };
