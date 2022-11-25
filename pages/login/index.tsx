@@ -79,9 +79,7 @@ const Login = () => {
   return (
     <Page title="Login">
       <Box as="main" mt={6}>
-        <Heading as="h1" size="lg">
-          Login
-        </Heading>
+        <Heading as="h1">Login</Heading>
         <Text textAlign="center">Login into the platform</Text>
         <Container onSubmit={handleSubmit(onSubmit)} as="form">
           <FormControl mt={3} isInvalid={Boolean(errors.email)}>

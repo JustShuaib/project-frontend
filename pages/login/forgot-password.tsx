@@ -70,9 +70,7 @@ const ForgotPassword = () => {
   return (
     <Page title="Forgot Password">
       <Box mt={6}>
-        <Heading as="h1" size="lg">
-          Forgot Password
-        </Heading>
+        <Heading as="h1">Forgot Password</Heading>
         <Text textAlign="center" fontSize="sm" px="6">
           Type in your email. A new password will be sent to your mail if you
           have an account with us.

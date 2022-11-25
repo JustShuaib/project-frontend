@@ -8,7 +8,7 @@ const Heading = ({
   children,
 }: {
   as: As;
-  size: string;
+  size?: string;
   children: ReactNode;
 }) => {
   return (
@@ -29,7 +29,7 @@ const Heading = ({
         },
       }}
     >
-      <ChakraHeading as={as} mb={2} size={size} textAlign="center">
+      <ChakraHeading as={as} mb={2} size={"lg" || size} textAlign="center">
         {children}
       </ChakraHeading>
     </motion.div>

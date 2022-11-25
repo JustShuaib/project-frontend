@@ -86,9 +86,7 @@ const SignUp = () => {
   return (
     <Page title="Sign up">
       <Box as="main" mt={6}>
-        <Heading as="h1" size="lg">
-          Sign Up
-        </Heading>
+        <Heading as="h1">Sign Up</Heading>
         <Text textAlign="center">Sign up on the platform</Text>
 
         <Container
