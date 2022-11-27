@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 const Heading = ({
   as,
   size,
+  variant,
   children,
 }: {
   as: As;
   size?: string;
+  variant?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   children: ReactNode;
 }) => {
   return (
@@ -29,7 +31,13 @@ const Heading = ({
         },
       }}
     >
-      <ChakraHeading as={as} mb={2} size={"lg" || size} textAlign="center">
+      <ChakraHeading
+        as={as}
+        mb={2}
+        size={"lg" || size}
+        textAlign="center"
+        variant={variant}
+      >
         {children}
       </ChakraHeading>
     </motion.div>
