@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Link, Page, Heading } from "../../components";
-import { BACKEND_URL } from "../../utils/urls";
+import { BACKEND_URL } from "../../utils";
 
 const ForgotPassword = () => {
   const router = useRouter();

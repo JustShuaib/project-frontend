@@ -1,16 +1,18 @@
 import { ReactNode } from "react";
 import { Heading as ChakraHeading } from "@chakra-ui/react";
-import type { As } from "@chakra-ui/react";
+import type { As, SpaceProps, ThemingProps } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 const Heading = ({
   as,
   size,
   variant,
+  mb,
   children,
 }: {
   as: As;
-  size?: string;
+  size?: ThemingProps["size"];
   variant?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  mb?: SpaceProps["mb"];
   children: ReactNode;
 }) => {
   return (
@@ -33,8 +35,8 @@ const Heading = ({
     >
       <ChakraHeading
         as={as}
-        mb={2}
-        size={"lg" || size}
+        mb={mb || 2}
+        size={size || "lg"}
         textAlign="center"
         variant={variant}
       >

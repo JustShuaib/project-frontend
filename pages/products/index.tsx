@@ -1,34 +1,45 @@
+import { GetServerSideProps } from "next";
 import React, { useState, SyntheticEvent } from "react";
 import {
   Box,
   Button,
-  ButtonGroup,
-  Card,
-  CardBody,
-  CardFooter,
-  Container,
-  Divider,
   Flex,
   FormControl,
   FormLabel,
-  Heading as ChakraHeading,
-  Image,
   Input,
-  SimpleGrid,
-  Stack,
-  Text,
+  useToast,
 } from "@chakra-ui/react";
-import { Navigation, A11y, Keyboard } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Page, Heading, BackToTop, ProductCard } from "../../components";
+import { Page, Heading, BackToTop, ProductsContainer } from "../../components";
 import { Wave } from "../../icons";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/a11y";
 import "swiper/css/keyboard";
+import { BACKEND_URL, ProductsProps } from "../../utils";
+interface Props {
+  products: {
+    detail: string | ProductsProps["products"];
+  };
+}
 
-const Products = () => {
+const Products = (props: Props) => {
+  const { detail } = props.products;
   const [searchTerm, setSearchTerm] = useState("");
+  console.log("PRODUCTS");
+  console.log(detail);
+  const toast = useToast({
+    description: "Looks like your session has expired. Please log in again.",
+    position: "top-right",
+    isClosable: true,
+    status: "error",
+  });
+  if (detail === "Not authenticated") {
+    toast({
+      onCloseComplete() {
+        window.location.href = "/login?redirectTo=/products";
+      },
+    });
+  }
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     if (searchTerm.length === 0) return;
@@ -68,69 +79,10 @@ const Products = () => {
             Search
           </Button>
         </Flex>
-
-        <Container as="section" my={3} maxW="container.xl">
-          <Heading as="h2" variant="h2">
-            Phones
-          </Heading>
-          <Swiper
-            modules={[Navigation, A11y, Keyboard]}
-            navigation
-            keyboard
-            a11y={{
-              enabled: true,
-              prevSlideMessage: "Previous slide",
-              nextSlideMessage: "Next slide",
-            }}
-            slidesPerView={4}
-            spaceBetween={25}
-            breakpoints={{
-              320: {
-                slidesPerView: 1,
-                spaceBetween: 10,
-              },
-              640: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 3,
-                spaceBetween: 40,
-              },
-              1024: {
-                slidesPerView: 4,
-                spaceBetween: 50,
-              },
-            }}
-          >
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ProductCard />
-            </SwiperSlide>
-          </Swiper>
-          <SimpleGrid columns={[1, 2, 4]} gap={6}>
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-          </SimpleGrid>
-        </Container>
+        {/* <ProductsContainer heading="Phones" products={productS} />
+        <ProductsContainer heading="Laptops" products={productS} />
+        <ProductsContainer heading="Tablets" products={productS} />
+        <ProductsContainer heading="Monitors" products={productS} /> */}
         <BackToTop />
       </Box>
       <Wave />
@@ -139,3 +91,99 @@ const Products = () => {
 };
 
 export default Products;
+const productT = [
+  {
+    name: "Iphone 12 Pro Max",
+    price: 1200,
+    image:
+      "https://images.unsplash.com/photo-1632972097677-f97e4e2a40d0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGlwaG9uZSUyMDEyJTIwcHJvJTIwbWF4fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+    category: "phones",
+    id: 1,
+  },
+  {
+    name: "Iphone 12 Pro",
+    price: 1000,
+    image:
+      "https://images.unsplash.com/photo-1607936854279-55e8a4c64888?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+    category: "phones",
+    id: 2,
+  },
+  {
+    name: "MacBook Pro",
+    price: 2000,
+    image:
+      "https://images.unsplash.com/photo-1569770218135-bea267ed7e84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFjYm9vayUyMHByb3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    category: "laptops",
+    id: 3,
+  },
+  {
+    name: "Iphone 12 Pro Max",
+    price: 1200,
+    image:
+      "https://images.unsplash.com/photo-1632972097677-f97e4e2a40d0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGlwaG9uZSUyMDEyJTIwcHJvJTIwbWF4fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+    category: "phones",
+    id: 1,
+  },
+  {
+    name: "Iphone 12 Pro",
+    price: 1000,
+    image:
+      "https://images.unsplash.com/photo-1607936854279-55e8a4c64888?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+    category: "phones",
+    id: 2,
+  },
+  {
+    name: "MacBook Pro",
+    price: 2000,
+    image:
+      "https://images.unsplash.com/photo-1569770218135-bea267ed7e84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFjYm9vayUyMHByb3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    category: "laptops",
+    id: 3,
+  },
+  {
+    name: "Iphone 12 Pro Max",
+    price: 1200,
+    image:
+      "https://images.unsplash.com/photo-1632972097677-f97e4e2a40d0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGlwaG9uZSUyMDEyJTIwcHJvJTIwbWF4fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+    category: "phones",
+    id: 1,
+  },
+  {
+    name: "Iphone 12 Pro",
+    price: 1000,
+    image:
+      "https://images.unsplash.com/photo-1607936854279-55e8a4c64888?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8aXBob25lJTIwMTJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+    category: "phones",
+    id: 2,
+  },
+  {
+    name: "MacBook Pro",
+    price: 2000,
+    image:
+      "https://images.unsplash.com/photo-1569770218135-bea267ed7e84?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFjYm9vayUyMHByb3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+    category: "laptops",
+    id: 3,
+  },
+];
+export const getServerSideProps: GetServerSideProps = async () => {
+  const products = await getProducts();
+  console.log(products);
+  return {
+    props: {
+      products,
+    },
+  };
+};
+const getProducts = async () => {
+  const res = await fetch(`${BACKEND_URL}/products`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQsImV4cCI6MTY2OTU1Mzk5MX0.Liau-gFAx37uHFNjAsPuaQ187PhJ12nMXBejDqUnMJw`,
+    },
+    credentials: "include",
+  });
+  const products = await res.json();
+  console.log(products);
+  return products;
+};

@@ -18,7 +18,7 @@ import {
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Eye, EyeClose } from "../icons";
 import { Link, Page, Heading } from "../components";
-import { BACKEND_URL } from "../utils/urls";
+import { BACKEND_URL } from "../utils";
 
 interface FormData {
   username: string;

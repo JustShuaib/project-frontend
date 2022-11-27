@@ -26,11 +26,13 @@ const BackToTop = () => {
       position="fixed"
       bottom={4}
       right={4}
+      zIndex={30}
       display={showScroll ? "flex" : "none"}
       onClick={scrollTop}
       sx={{
+        bg: "gray.200",
         "&:hover": {
-          bg: "primary.500",
+          bg: "gray.300",
         },
         "@keyframes expand": {
           "0%": {
