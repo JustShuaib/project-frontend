@@ -1,7 +1,7 @@
 import { Button, Container, IconButton } from "@chakra-ui/react";
 import { Navigation, A11y, Keyboard } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Heading, ProductCard } from "../components";
+import { Heading, ProductCard } from ".";
 import { Next, Previous } from "../icons";
 import { ProductsProps } from "../utils";
 import "swiper/css";
@@ -18,7 +18,7 @@ import "swiper/css/keyboard";
 //   }[];
 // }
 
-const productsContainer = ({
+const ProductsContainer = ({
   heading,
   products,
 }: {
@@ -120,4 +120,4 @@ const productsContainer = ({
   );
 };
 
-export default productsContainer;
+export default ProductsContainer;

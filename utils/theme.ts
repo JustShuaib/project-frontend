@@ -1,9 +1,33 @@
-import { extendTheme, defineStyleConfig } from "@chakra-ui/react";
+import { alertAnatomy } from "@chakra-ui/anatomy";
+import {
+  extendTheme,
+  defineStyleConfig,
+  createMultiStyleConfigHelpers,
+} from "@chakra-ui/react";
 import { Open_Sans, Roboto, Ubuntu_Mono } from "@next/font/google";
 const openSans = Open_Sans();
 const roboto = Roboto({ weight: "700" });
 const ubuntuMono = Ubuntu_Mono({ weight: "400" });
-const Heading = defineStyleConfig({
+
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(alertAnatomy.keys);
+
+const baseStyle = definePartsStyle({
+  // define the part you're going to style
+  title: {
+    fontSize: 14,
+    fontFamily: "mono", // change the font family
+    color: "teal.500", // change the input text color
+  },
+  description: {
+    fontSize: 12, // change the font size
+    color: "gray.500", // change the input text color
+  },
+});
+
+const alertTheme = defineMultiStyleConfig({ baseStyle });
+
+const HeadingTheme = defineStyleConfig({
   baseStyle: {
     fontFamily: roboto.style.fontFamily,
     textAlign: "center",
@@ -15,7 +39,7 @@ const Heading = defineStyleConfig({
     },
   },
 });
-const Button = defineStyleConfig({
+const ButtonTheme = defineStyleConfig({
   baseStyle: {
     fontFamily: ubuntuMono.style.fontFamily,
     backgroundColor: "blue.500",
@@ -24,10 +48,18 @@ const Button = defineStyleConfig({
     },
   },
 });
+const AlertTheme = defineStyleConfig({
+  baseStyle: {
+    fontSize: "0.6rem",
+  },
+});
 export const theme = extendTheme({
   components: {
-    Heading: Heading,
-    Button: Button,
+    Heading: HeadingTheme,
+    Button: ButtonTheme,
+    alert: alertTheme,
+    toast: alertTheme,
+    // AlertDescription: AlertTheme,
   },
   styles: {
     global: {

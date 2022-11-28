@@ -17,29 +17,47 @@ import "swiper/css/a11y";
 import "swiper/css/keyboard";
 import { BACKEND_URL, ProductsProps } from "../../utils";
 interface Props {
-  products: {
-    detail: string | ProductsProps["products"];
-  };
+  products:
+    | ProductsProps["products"]
+    | {
+        detail: string;
+      };
 }
 
-const Products = (props: Props) => {
-  const { detail } = props.products;
+const Products = ({ products }: Props) => {
+  console.log(products);
+  // const { detail } = products;
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("PRODUCTS");
-  console.log(detail);
+  let categories: string[] = [];
   const toast = useToast({
     description: "Looks like your session has expired. Please log in again.",
     position: "top-right",
     isClosable: true,
     status: "error",
   });
-  if (detail === "Not authenticated") {
+  if (Array.isArray(products)) {
+    console.log(products);
+    // find the unique categories in the products array
+    categories = Array.from(new Set(products.map((prod) => prod.category)));
+  } else {
     toast({
       onCloseComplete() {
-        window.location.href = "/login?redirectTo=/products";
+        window.location.href = "/login";
       },
     });
   }
+  // if (products.) {
+  //   toast({
+  //     onCloseComplete() {
+  //       window.location.href = "/login";
+  //     },
+  //   });
+  //   return;
+  // } else {
+  //   console.log("PROPS");
+  //   console.log(products);
+  //   // categories = products.filter()
+  // }
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     if (searchTerm.length === 0) return;
@@ -167,6 +185,7 @@ const productT = [
 ];
 export const getServerSideProps: GetServerSideProps = async () => {
   const products = await getProducts();
+  console.log("SERVER PRODUCTS");
   console.log(products);
   return {
     props: {

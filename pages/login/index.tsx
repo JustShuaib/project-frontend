@@ -15,6 +15,9 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken } from "../../services/slices/loginSlice";
+import { RootState } from "../../services/store";
 import { Eye, EyeClose } from "../../icons";
 import { Link, Page, Heading } from "../../components";
 import { BACKEND_URL } from "../../utils";
@@ -25,6 +28,8 @@ interface FormData {
 }
 const Login = () => {
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.login.token);
   const {
     register,
     handleSubmit,
@@ -46,8 +51,9 @@ const Login = () => {
         method: "POST",
         body: formData,
       });
-      const data = await res.json();
+      const data: { access_token: string; detail?: string } = await res.json();
       console.log(data);
+      dispatch(setToken(data.access_token));
       if (res.status === 200) {
         toast({
           description: "Logged in successfully",
@@ -57,7 +63,7 @@ const Login = () => {
         setShow(false);
       } else {
         toast({
-          description: data?.detail,
+          description: data.detail,
           status: "error",
         });
       }
@@ -125,6 +131,17 @@ const Login = () => {
           </FormControl>
           <Button my={4} w="full" isLoading={isSubmitting} type="submit">
             Login
+          </Button>
+          <Button
+            type="button"
+            onClick={() => {
+              toast({
+                description: "This is a test content for the toast",
+                duration: 10_000,
+              }); // this is just to test the toast
+            }}
+          >
+            Toast!
           </Button>
           <Flex
             direction={["column", "row"]}

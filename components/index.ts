@@ -1,6 +1,6 @@
-export { default as Link } from "./link";
-export { default as Page } from "./page";
-export { default as Heading } from "./heading";
-export { default as BackToTop } from "./backToTop";
-export { default as ProductsContainer } from "./productsContainer";
-export { default as ProductCard } from "./productCard";
+export { default as Link } from "./Link";
+export { default as Page } from "./Page";
+export { default as Heading } from "./Heading";
+export { default as BackToTop } from "./BackToTop";
+export { default as ProductsContainer } from "./ProductsContainer";
+export { default as ProductCard } from "./ProductCard";

@@ -3,6 +3,7 @@ import { Inter } from "@next/font/google";
 import { ReactNode } from "react";
 import { Link as ChakraLink } from "@chakra-ui/react";
 const inter = Inter({ weight: ["400"] });
+
 const Link = ({
   href,
   children,

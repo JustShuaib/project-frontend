@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Heading as ChakraHeading } from "@chakra-ui/react";
 import type { As, SpaceProps, ThemingProps } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+
 const Heading = ({
   as,
   size,

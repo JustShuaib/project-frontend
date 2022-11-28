@@ -1,7 +1,9 @@
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
+import { Provider } from "react-redux";
 import { motion } from "framer-motion";
 import { theme } from "../utils/theme";
+import { store } from "../services/store";
 export default function App({ Component, pageProps, router }: AppProps) {
   return (
     <motion.div
@@ -20,9 +22,11 @@ export default function App({ Component, pageProps, router }: AppProps) {
         },
       }}
     >
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
+      <Provider store={store}>
+        <ChakraProvider theme={theme}>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </Provider>
     </motion.div>
   );
 }
