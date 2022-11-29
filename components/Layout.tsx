@@ -1,7 +1,13 @@
 import Head from "next/head";
 import { ReactNode } from "react";
 
-const Page = ({ title, children }: { title: string; children: ReactNode }) => {
+const Layout = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) => {
   return (
     <>
       <Head>
@@ -12,4 +18,4 @@ const Page = ({ title, children }: { title: string; children: ReactNode }) => {
   );
 };
 
-export default Page;
+export default Layout;
