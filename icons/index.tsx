@@ -1,9 +1,12 @@
 import { Icon } from "@chakra-ui/react";
+import type { IconProps } from "@chakra-ui/react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { FcPrevious, FcNext } from "react-icons/fc";
+import { BsArrowLeft } from "react-icons/bs";
 const Eye = () => <Icon as={FiEye} />;
 const EyeClose = () => <Icon as={FiEyeOff} />;
 const Previous = () => <Icon as={FcPrevious} />;
 const Next = () => <Icon as={FcNext} />;
-export { Eye, EyeClose, Previous, Next };
+const ArrowLeft = (props: IconProps) => <Icon as={BsArrowLeft} {...props} />;
+export { Eye, EyeClose, Previous, Next, ArrowLeft };
 export { default as Wave } from "./wave";

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import {
-  useToast,
+  Box,
   Button,
   Container,
   Flex,
@@ -13,12 +13,11 @@ import {
   InputGroup,
   InputRightElement,
   Text,
-  Box,
+  useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { useUpdatePasswordMutation } from "../services/api";
-import { useAppSelector } from "../services/hooks";
 import { Heading, Layout, Link } from "../components";
 import { EyeClose, Eye, ArrowLeft } from "../icons";
 
@@ -29,7 +28,6 @@ export interface PasswordForm {
 }
 const UpdatePassword = () => {
   const router = useRouter();
-  // const token = useAppSelector((state) => state.login.token);
   const toast = useToast({
     position: "top-right",
     isClosable: true,
