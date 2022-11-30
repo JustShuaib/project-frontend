@@ -25,11 +25,11 @@ import { EyeClose, Eye, ArrowLeft } from "../icons";
 export interface PasswordForm {
   old_password: string;
   new_password: string;
-  confirm_new_password: string;
+  confirm_new_password?: string;
 }
 const UpdatePassword = () => {
   const router = useRouter();
-  const token = useAppSelector((state) => state.login.token);
+  // const token = useAppSelector((state) => state.login.token);
   const toast = useToast({
     position: "top-right",
     isClosable: true,
@@ -50,31 +50,25 @@ const UpdatePassword = () => {
     formState: { errors },
   } = useForm<PasswordForm>();
 
-  const newPassword = getValues("new_password");
-
-  const onSubmit: SubmitHandler<PasswordForm> = (data) => {
-    updatePassword({ ...data, token })
+  const onSubmit: SubmitHandler<PasswordForm> = ({
+    old_password,
+    new_password,
+  }) => {
+    const token = localStorage.getItem("token")!;
+    const data = { old_password, new_password };
+    console.log("token is: ", token);
+    updatePassword({ data, token })
       .unwrap()
-      .then((response: { status: number; data: { detail: string } }) => {
-        console.log("Response: ", response);
-        if (response.status === 200) {
-          console.log(response);
-          toast({
-            description: "Password updated successfully",
-            status: "success",
-            onCloseComplete() {
-              router.push("/login");
-            },
-          });
-        } else {
-          console.log("Not done", response);
-          toast({
-            description: "Password updated successfully",
-            status: "success",
-          });
-        }
+      .then(() => {
+        toast({
+          description: "Password updated successfully",
+          status: "success",
+          onCloseComplete() {
+            router.push("/login");
+          },
+        });
       })
-      .catch((err: { status: string; data: { detail: string } }) => {
+      .catch((err: { status: string }) => {
         console.error(err);
         if (err.status === "FETCH_ERROR") {
           toast({
@@ -82,9 +76,8 @@ const UpdatePassword = () => {
             status: "error",
           });
         } else {
-          console.log("main error", err);
           toast({
-            description: err.data.detail,
+            description: "Looks like you aren't logged in",
             status: "error",
             onCloseComplete() {
               router.replace("/login");
@@ -154,7 +147,7 @@ const UpdatePassword = () => {
                 {...register("confirm_new_password", {
                   required: "Field is required",
                   validate: (confirm_new_password) =>
-                    newPassword === confirm_new_password ||
+                    confirm_new_password === getValues("new_password") ||
                     "Passwords do not match",
                 })}
               />
