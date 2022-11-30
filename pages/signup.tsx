@@ -16,11 +16,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useSignupMutation } from "../services/api";
 import { Eye, EyeClose } from "../icons";
-import { Link, Page, Heading } from "../components";
-import { BACKEND_URL } from "../utils";
+import { Link, Layout, Heading } from "../components";
 
-interface FormData {
+export interface SignUpFormData {
   username: string;
   email: string;
   password: string;
@@ -29,6 +29,7 @@ interface FormData {
 const SignUp = () => {
   const router = useRouter();
   const [show, setShow] = useState({ pWord: false, cpWord: false });
+  const [signup, { isLoading }] = useSignupMutation();
   const toast = useToast({
     size: "small",
     position: "top-right",
@@ -38,53 +39,43 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset,
     getValues,
-  } = useForm<FormData>();
-  const password = getValues("password");
+  } = useForm<SignUpFormData>();
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    try {
-      const res = await fetch(`${BACKEND_URL}/users`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const { detail } = await res.json();
-      if (res.status === 201) {
+  const onSubmit: SubmitHandler<SignUpFormData> = (data) => {
+    signup(data)
+      .unwrap()
+      .then((res: { detail: string }) => {
         toast({
-          description: detail,
+          description: res.detail,
           status: "success",
           onCloseComplete() {
-            router.replace("/login");
+            router.push("/login");
           },
         });
         reset();
         setShow({ pWord: false, cpWord: false });
-      } else {
-        toast({
-          description: detail,
-          status: "error",
-        });
-      }
-    } catch (error: any) {
-      console.log(error);
-      if (error?.message === "Failed to fetch") {
-        toast({
-          description: "Please check your internet connection.",
-          status: "error",
-        });
-      } else {
-        toast({
-          description: "Please try again.",
-          status: "error",
-        });
-      }
-    }
+      })
+      .catch((err: { status: string; data: { detail: string } }) => {
+        console.log("Error: ", err);
+        if (err.status === "FETCH_ERROR") {
+          toast({
+            description: "Check your internet connection",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: err.data.detail,
+            status: "error",
+          });
+        }
+      });
   };
+
   return (
-    <Page title="Sign up">
+    <Layout title="Sign up">
       <Box as="main" mt={6}>
         <Heading as="h1">Sign Up</Heading>
         <Text textAlign="center">Sign up on the platform</Text>
@@ -179,7 +170,8 @@ const SignUp = () => {
                   id="confirmPassword"
                   {...register("confirm_password", {
                     validate: (value) =>
-                      value === password || "The passwords do not match",
+                      value === getValues("password") ||
+                      "The passwords do not match",
                     required: "Confirm Password",
                   })}
                   type={show.cpWord ? "text" : "password"}
@@ -203,7 +195,7 @@ const SignUp = () => {
               </FormErrorMessage>
             </FormControl>
           </Flex>
-          <Button type="submit" w="full" my={4} isLoading={isSubmitting}>
+          <Button type="submit" w="full" my={4} isLoading={isLoading}>
             Sign Up
           </Button>
 
@@ -212,7 +204,7 @@ const SignUp = () => {
           </Text>
         </Container>
       </Box>
-    </Page>
+    </Layout>
   );
 };
 
