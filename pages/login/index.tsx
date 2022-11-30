@@ -15,12 +15,11 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../../services/slices/loginSlice";
-import { RootState } from "../../services/store";
+import { useLoginMutation } from "../../services/api";
+import { useAppSelector, useAppDispatch } from "../../services/hooks";
 import { Eye, EyeClose } from "../../icons";
-import { Link, Page, Heading } from "../../components";
-import { BACKEND_URL } from "../../utils";
+import { Link, Layout, Heading } from "../../components";
 
 interface FormData {
   email: string;
@@ -28,62 +27,65 @@ interface FormData {
 }
 const Login = () => {
   const [show, setShow] = useState(false);
-  const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state: RootState) => state.login.token);
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.login.token);
+  const [login, { isLoading }] = useLoginMutation();
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormData>();
   const toast = useToast({
     size: "small",
     position: "top-right",
     isClosable: true,
-    styleConfig: { fontSize: "12px" },
+    styleConfig: {
+      fontSize: "12px",
+      _description: {
+        fontSize: "12px",
+      },
+    },
   });
-  const onSubmit: SubmitHandler<FormData> = async ({ email, password }) => {
+  const onSubmit: SubmitHandler<FormData> = ({ email, password }) => {
     const formData = new FormData();
     formData.append("username", email);
     formData.append("password", password);
-    try {
-      const res = await fetch(`${BACKEND_URL}/login`, {
-        method: "POST",
-        body: formData,
+    if (isLoggedIn) {
+      toast({
+        description: "You are already logged in",
+        status: "error",
       });
-      const data: { access_token: string; detail?: string } = await res.json();
-      console.log(data);
-      dispatch(setToken(data.access_token));
-      if (res.status === 200) {
-        toast({
-          description: "Logged in successfully",
-          status: "success",
+    } else {
+      login(formData)
+        .unwrap()
+        .then((res) => {
+          dispatch(setToken(res.access_token));
+          toast({
+            description: "Logged in successfully",
+            status: "success",
+          });
+          reset();
+          setShow(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          if (err.status === "FETCH_ERROR") {
+            toast({
+              description: "Check your internet connection",
+              status: "error",
+            });
+          } else {
+            toast({
+              description: "Invalid username or password",
+              status: "error",
+            });
+          }
         });
-        reset();
-        setShow(false);
-      } else {
-        toast({
-          description: data.detail,
-          status: "error",
-        });
-      }
-    } catch (error: any) {
-      console.log(error);
-      if (error?.message === "Failed to fetch") {
-        toast({
-          description: "Please check your internet connection.",
-          status: "error",
-        });
-      } else {
-        toast({
-          description: "Something went wrong, Please try again.",
-          status: "error",
-        });
-      }
     }
   };
   return (
-    <Page title="Login">
+    <Layout title="Login">
       <Box as="main" mt={6}>
         <Heading as="h1">Login</Heading>
         <Text textAlign="center">Login into the platform</Text>
@@ -129,10 +131,10 @@ const Login = () => {
               {errors.password && errors.password.message}
             </FormErrorMessage>
           </FormControl>
-          <Button my={4} w="full" isLoading={isSubmitting} type="submit">
+          <Button my={4} w="full" isLoading={isLoading} type="submit">
             Login
           </Button>
-          <Button
+          {/* <Button
             type="button"
             onClick={() => {
               toast({
@@ -142,7 +144,7 @@ const Login = () => {
             }}
           >
             Toast!
-          </Button>
+          </Button> */}
           <Flex
             direction={["column", "row"]}
             fontSize="sm"
@@ -153,10 +155,11 @@ const Login = () => {
               Don&apos;t have an account? <Link href="/signup">Sign up</Link>
             </Text>
             <Link href="/login/forgot-password">Forgot Password?</Link>
+            <Link href="/update-password">Change Password</Link>
           </Flex>
         </Container>
       </Box>
-    </Page>
+    </Layout>
   );
 };
 
