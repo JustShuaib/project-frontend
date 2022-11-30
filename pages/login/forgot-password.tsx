@@ -12,11 +12,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link, Page, Heading } from "../../components";
-import { BACKEND_URL } from "../../utils";
+import { useForgotPasswordMutation } from "../../services/api";
+import { Link, Layout, Heading } from "../../components";
 
 const ForgotPassword = () => {
   const router = useRouter();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const toast = useToast({
     position: "top-right",
     isClosable: true,
@@ -26,49 +27,40 @@ const ForgotPassword = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<{ email: string }>();
 
-  const onSubmit: SubmitHandler<{ email: string }> = async ({ email }) => {
-    try {
-      const res = await fetch(`${BACKEND_URL}/forgetpassword`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const { detail } = await res.json();
-      if (res.status === 201) {
+  const onSubmit: SubmitHandler<{ email: string }> = (data) => {
+    forgotPassword(data)
+      .unwrap()
+      .then((res: { detail: string }) => {
+        console.log("Response: ", res);
         toast({
-          description: detail,
+          description: res.detail,
           status: "success",
           onCloseComplete() {
             router.push("/login");
           },
         });
         reset();
-      } else {
-        toast({
-          description: detail,
-          status: "error",
-        });
-      }
-    } catch (error: any) {
-      console.log(error);
-      if (error?.message === "Failed to fetch") {
-        toast({
-          description: "Please check your internet connection.",
-          status: "error",
-        });
-      } else {
-        toast({
-          description: "Please try again.",
-          status: "error",
-        });
-      }
-    }
+      })
+      .catch((err: { status: string; data: { detail: string } }) => {
+        console.log("Error: ", err);
+        if (err.status === "FETCH_ERROR") {
+          toast({
+            description: "Check your internet connection",
+            status: "error",
+          });
+        } else
+          toast({
+            description: err.data.detail,
+            status: "error",
+          });
+      });
   };
+
   return (
-    <Page title="Forgot Password">
+    <Layout title="Forgot Password">
       <Box mt={6}>
         <Heading as="h1">Forgot Password</Heading>
         <Text textAlign="center" fontSize="sm" px="6">
@@ -94,15 +86,15 @@ const ForgotPassword = () => {
             </FormErrorMessage>
           </FormControl>
 
-          <Button type="submit" w="full" isLoading={isSubmitting} my={4} py={5}>
+          <Button type="submit" w="full" isLoading={isLoading} my={4} py={5}>
             Reset Password
           </Button>
           <Flex fontSize="sm" justify="center" gap={1}>
-            Already have an account?<Link href="/login">Login</Link>
+            Already have an account? <Link href="/login">Login</Link>
           </Flex>
         </Container>
       </Box>
-    </Page>
+    </Layout>
   );
 };
 
