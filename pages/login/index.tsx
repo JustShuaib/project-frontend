@@ -37,15 +37,8 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormData>();
   const toast = useToast({
-    size: "small",
     position: "top-right",
     isClosable: true,
-    styleConfig: {
-      fontSize: "12px",
-      _description: {
-        fontSize: "12px",
-      },
-    },
   });
   const onSubmit: SubmitHandler<FormData> = ({ email, password }) => {
     const formData = new FormData();
@@ -134,17 +127,7 @@ const Login = () => {
           <Button my={4} w="full" isLoading={isLoading} type="submit">
             Login
           </Button>
-          {/* <Button
-            type="button"
-            onClick={() => {
-              toast({
-                description: "This is a test content for the toast",
-                duration: 10_000,
-              }); // this is just to test the toast
-            }}
-          >
-            Toast!
-          </Button> */}
+
           <Flex
             direction={["column", "row"]}
             fontSize="sm"

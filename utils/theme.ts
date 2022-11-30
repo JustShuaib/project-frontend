@@ -13,19 +13,15 @@ const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(alertAnatomy.keys);
 
 const baseStyle = definePartsStyle({
-  // define the part you're going to style
   title: {
     fontSize: 14,
-    fontFamily: "mono", // change the font family
-    color: "teal.500", // change the input text color
   },
   description: {
-    fontSize: 12, // change the font size
-    color: "gray.500", // change the input text color
+    fontSize: 13,
   },
 });
 
-const alertTheme = defineMultiStyleConfig({ baseStyle });
+const AlertTheme = defineMultiStyleConfig({ baseStyle });
 
 const HeadingTheme = defineStyleConfig({
   baseStyle: {
@@ -48,18 +44,12 @@ const ButtonTheme = defineStyleConfig({
     },
   },
 });
-const AlertTheme = defineStyleConfig({
-  baseStyle: {
-    fontSize: "0.6rem",
-  },
-});
+
 export const theme = extendTheme({
   components: {
     Heading: HeadingTheme,
     Button: ButtonTheme,
-    alert: alertTheme,
-    toast: alertTheme,
-    // AlertDescription: AlertTheme,
+    Alert: AlertTheme,
   },
   styles: {
     global: {

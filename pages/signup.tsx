@@ -31,10 +31,8 @@ const SignUp = () => {
   const [show, setShow] = useState({ pWord: false, cpWord: false });
   const [signup, { isLoading }] = useSignupMutation();
   const toast = useToast({
-    size: "small",
     position: "top-right",
     isClosable: true,
-    styleConfig: { fontSize: "12px" },
   });
   const {
     register,

@@ -21,7 +21,6 @@ const ForgotPassword = () => {
   const toast = useToast({
     position: "top-right",
     isClosable: true,
-    duration: 3000,
   });
   const {
     register,
