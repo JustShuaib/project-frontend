@@ -4,8 +4,10 @@ import {
   defineStyleConfig,
   createMultiStyleConfigHelpers,
 } from "@chakra-ui/react";
-import { Open_Sans, Roboto, Ubuntu_Mono } from "@next/font/google";
+import { Open_Sans, Poppins, Roboto, Ubuntu_Mono } from "@next/font/google";
+
 const openSans = Open_Sans();
+const poppins = Poppins({ weight: "400" });
 const roboto = Roboto({ weight: "700" });
 const ubuntuMono = Ubuntu_Mono({ weight: "400" });
 
@@ -18,6 +20,7 @@ const baseStyle = definePartsStyle({
   },
   description: {
     fontSize: 13,
+    fontFamily: poppins.style.fontFamily,
   },
 });
 
