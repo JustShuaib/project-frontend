@@ -1,11 +1,21 @@
 import { fetchBaseQuery, createApi } from "@reduxjs/toolkit/query/react";
 import type { SignUpFormData } from "../pages/signup";
 import type { PasswordForm } from "../pages/update-password";
-import { BACKEND_URL } from "../utils";
+import { BACKEND_URL, ProductProps } from "../utils";
+import { RootState } from "./store";
 
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: BACKEND_URL }),
+
+  baseQuery: fetchBaseQuery({
+    baseUrl: BACKEND_URL,
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).login.token;
+      if (token) headers.set("authorization", `Bearer ${token}`);
+      return headers;
+    },
+  }),
+
   endpoints: (build) => ({
     signup: build.mutation({
       query: (data: SignUpFormData) => ({
@@ -32,14 +42,15 @@ export const api = createApi({
     }),
 
     updatePassword: build.mutation({
-      query: ({ data, token }: { data: PasswordForm; token: string }) => ({
+      query: (data: PasswordForm) => ({
         url: "/users/updatepassword",
         method: "POST",
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
         body: data,
       }),
+    }),
+
+    getProducts: build.query<ProductProps[], string>({
+      query: () => "/products",
     }),
   }),
 });
@@ -48,4 +59,5 @@ export const {
   useLoginMutation,
   useForgotPasswordMutation,
   useUpdatePasswordMutation,
+  useGetProductsQuery,
 } = api;

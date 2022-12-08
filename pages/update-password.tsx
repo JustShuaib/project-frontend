@@ -18,6 +18,8 @@ import {
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { useUpdatePasswordMutation } from "../services/api";
+import { useAppDispatch } from "../services/hooks";
+import { removeToken } from "../services/slices/authSlice";
 import { Heading, Layout, Link } from "../components";
 import { EyeClose, Eye, ArrowLeft } from "../icons";
 
@@ -27,20 +29,24 @@ export interface PasswordForm {
   confirm_new_password?: string;
 }
 const UpdatePassword = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const toast = useToast({
     position: "top-right",
     isClosable: true,
   });
+
   const [showPassword, setShowPassword] = useState({
     old: false,
     new: false,
     confirmNew: false,
   });
   const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
+
   const handleToggle = (name: "old" | "new" | "confirmNew") => {
     setShowPassword((state) => ({ ...state, [name]: !state[name] }));
   };
+
   const {
     register,
     handleSubmit,
@@ -52,16 +58,15 @@ const UpdatePassword = () => {
     old_password,
     new_password,
   }) => {
-    const token = localStorage.getItem("token")!;
     const data = { old_password, new_password };
-    console.log("token is: ", token);
-    updatePassword({ data, token })
+    updatePassword(data)
       .unwrap()
       .then(() => {
         toast({
           description: "Password updated successfully",
           status: "success",
           onCloseComplete() {
+            dispatch(removeToken());
             router.push("/login");
           },
         });
@@ -75,7 +80,7 @@ const UpdatePassword = () => {
           });
         } else {
           toast({
-            description: "Looks like you aren't logged in",
+            description: "Looks like you are not logged in",
             status: "error",
             onCloseComplete() {
               router.replace("/login");

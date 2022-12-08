@@ -39,6 +39,7 @@ const Heading = ({
         mb={mb || 2}
         size={size || "lg"}
         textAlign="center"
+        textTransform="capitalize"
         variant={variant}
       >
         {children}
