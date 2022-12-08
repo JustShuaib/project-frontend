@@ -6,19 +6,10 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
+import { ProductProps } from "../utils";
 
-const ProductCard = ({
-  product,
-}: {
-  product: {
-    name: string;
-    price: number;
-    image: string;
-    category: string;
-    id: number;
-  };
-}) => {
-  const { name, price, image, category } = product;
+const ProductCard = ({ product }: { product: ProductProps }) => {
+  const { product_name, price, image } = product;
   return (
     <Box
       rounded="md"
@@ -30,13 +21,29 @@ const ProductCard = ({
         },
       }}
     >
-      <Image h={64} w="full" src={image} alt={name} objectFit="cover" />
+      <Image
+        h={64}
+        w="full"
+        src={image}
+        alt={product_name}
+        objectFit="contain"
+      />
       <Divider />
       <Container>
-        <Heading size="sm" my={2} textAlign="left">
-          {name}
+        <Heading
+          size="xs"
+          mt={3}
+          textAlign="left"
+          sx={{
+            maxW: "30ch",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {product_name}
         </Heading>
-        <Text mb={2}>${price.toLocaleString()}</Text>
+        <Text fontSize="sm">₦ {price.toLocaleString()}</Text>
       </Container>
     </Box>
   );

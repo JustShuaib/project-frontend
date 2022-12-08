@@ -1,32 +1,28 @@
-import { Button, Container, IconButton } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { Container, IconButton } from "@chakra-ui/react";
 import { Navigation, A11y, Keyboard } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Heading, ProductCard } from ".";
+import { Heading, ProductCard, SeeAll } from ".";
 import { Next, Previous } from "../icons";
-import { ProductsProps } from "../utils";
+import { ProductProps } from "../utils";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/a11y";
 import "swiper/css/keyboard";
-// interface ProductsProps {
-//   products: {
-//     name: string;
-//     price: number;
-//     image: string;
-//     category: string;
-//     id: number;
-//   }[];
-// }
 
 const ProductsContainer = ({
   heading,
   products,
 }: {
   heading: string;
-  products: ProductsProps["products"];
+  products: ProductProps[];
 }) => {
+  const router = useRouter();
+  const seeAll = () => {
+    router.push("/products/" + heading.toLowerCase());
+  };
   return (
-    <Container as="section" my={10} maxW="container.xl">
+    <Container as="section" my={[10, 8]} maxW="container.xl">
       <Heading as="h2" variant="h2" mb={[4, 6]}>
         {heading}
       </Heading>
@@ -77,13 +73,13 @@ const ProductsContainer = ({
             pt: 1.5,
             px: 2,
             "&:hover": {
-              bg: "gray.200",
+              bg: "gray.300",
             },
           }}
           className="prevBtn"
         />
         {products.map((product) => (
-          <SwiperSlide key={product.id}>
+          <SwiperSlide key={product.product_id}>
             <ProductCard product={product} />
           </SwiperSlide>
         ))}
@@ -101,21 +97,13 @@ const ProductsContainer = ({
             pt: 1.5,
             px: 2,
             "&:hover": {
-              bg: "gray.200",
+              bg: "gray.300",
             },
           }}
           className="nextBtn"
         />
       </Swiper>
-      <Button
-        pos="relative"
-        textAlign="right"
-        right={0}
-        as="a"
-        rightIcon={<Next />}
-      >
-        See All
-      </Button>
+      <SeeAll onClick={seeAll} />
     </Container>
   );
 };
