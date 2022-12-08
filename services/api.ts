@@ -52,6 +52,10 @@ export const api = createApi({
     getProducts: build.query<ProductProps[], string>({
       query: () => "/products",
     }),
+
+    getProductsByCategory: build.query<ProductProps[], string>({
+      query: (category) => `/products/${category}`,
+    }),
   }),
 });
 export const {
@@ -60,4 +64,6 @@ export const {
   useForgotPasswordMutation,
   useUpdatePasswordMutation,
   useGetProductsQuery,
+  useGetProductsByCategoryQuery,
+  usePrefetch,
 } = api;

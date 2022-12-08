@@ -1,11 +1,18 @@
 import { Flex, IconButton, Text } from "@chakra-ui/react";
 import { Next } from "../icons";
 
-const SeeAll = ({ onClick }: { onClick: () => void }) => {
+const SeeAll = ({
+  onClick,
+  onMouseEnter,
+}: {
+  onClick: () => void;
+  onMouseEnter?: () => void;
+}) => {
   return (
     <Flex align="center" mt={4} gap={2}>
       <Text fontSize="sm">See All</Text>
       <IconButton
+        onMouseEnter={onMouseEnter}
         onClick={onClick}
         variant="unstyled"
         aria-label="see all"

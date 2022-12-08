@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Heading, ProductCard, SeeAll } from ".";
 import { Next, Previous } from "../icons";
 import { ProductProps } from "../utils";
+import { usePrefetch } from "../services/api";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/a11y";
@@ -18,9 +19,16 @@ const ProductsContainer = ({
   products: ProductProps[];
 }) => {
   const router = useRouter();
-  const seeAll = () => {
-    router.push("/products/" + heading.toLowerCase());
+  const prefetch = usePrefetch("getProductsByCategory");
+  const handleSeeAll = () => {
+    router.push("/products/" + heading.toLowerCase(), undefined, {
+      shallow: true,
+    });
   };
+  const handleMouseEnter = () => {
+    prefetch(heading.toLowerCase());
+  };
+
   return (
     <Container as="section" my={[10, 8]} maxW="container.xl">
       <Heading as="h2" variant="h2" mb={[4, 6]}>
@@ -103,7 +111,7 @@ const ProductsContainer = ({
           className="nextBtn"
         />
       </Swiper>
-      <SeeAll onClick={seeAll} />
+      <SeeAll onMouseEnter={handleMouseEnter} onClick={handleSeeAll} />
     </Container>
   );
 };

@@ -8,12 +8,14 @@ const Heading = ({
   size,
   variant,
   mb,
+  color,
   children,
 }: {
   as: As;
   size?: ThemingProps["size"];
   variant?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   mb?: SpaceProps["mb"];
+  color?: ThemingProps["colorScheme"];
   children: ReactNode;
 }) => {
   return (
@@ -41,6 +43,7 @@ const Heading = ({
         textAlign="center"
         textTransform="capitalize"
         variant={variant}
+        color={color}
       >
         {children}
       </ChakraHeading>

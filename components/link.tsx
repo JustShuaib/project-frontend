@@ -15,7 +15,10 @@ const Link = ({
 }) => {
   return (
     <NextLink href={href} legacyBehavior passHref>
-      <ChakraLink className={inter.className} color={color || "blue.500"}>
+      <ChakraLink
+        fontFamily={inter.style.fontFamily}
+        color={color || "blue.500"}
+      >
         {children}
       </ChakraLink>
     </NextLink>

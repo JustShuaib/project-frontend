@@ -4,3 +4,7 @@ export { default as Heading } from "./Heading";
 export { default as BackToTop } from "./BackToTop";
 export { default as ProductsContainer } from "./ProductsContainer";
 export { default as ProductCard } from "./ProductCard";
+export { default as Products } from "./Products";
+export { default as RouteGuard } from "./RouteGuard";
+export { default as SeeAll } from "./SeeAll";
+export { default as ProductCategory } from "./ProductCategory";

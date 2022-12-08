@@ -1,22 +1,14 @@
-import {
-  Box,
-  Container,
-  Divider,
-  Heading,
-  Image,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Container, Image, Text } from "@chakra-ui/react";
 import { ProductProps } from "../utils";
 
 const ProductCard = ({ product }: { product: ProductProps }) => {
   const { product_name, price, image } = product;
   return (
     <Box
-      rounded="md"
-      overflow="hidden"
+      textAlign="center"
       sx={{
         transition: "all 0.2s ease-in-out",
-        "&:hover": {
+        _hover: {
           transform: "scale(1.02)",
         },
       }}
@@ -28,13 +20,12 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
         alt={product_name}
         objectFit="contain"
       />
-      <Divider />
-      <Container>
-        <Heading
-          size="xs"
-          mt={3}
-          textAlign="left"
+      <Container py={3}>
+        <Text
+          fontWeight="semibold"
+          textAlign="center"
           sx={{
+            mx: "auto",
             maxW: "30ch",
             overflow: "hidden",
             textOverflow: "ellipsis",
@@ -42,7 +33,7 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
           }}
         >
           {product_name}
-        </Heading>
+        </Text>
         <Text fontSize="sm">₦ {price.toLocaleString()}</Text>
       </Container>
     </Box>
