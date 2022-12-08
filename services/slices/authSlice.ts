@@ -5,15 +5,13 @@ export const authSlice = createSlice({
   initialState: {
     token: "",
     redirect: "",
-    // user: {},
   },
   reducers: {
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
       let redirectTo = state.redirect;
-      if (redirectTo === "/login" || redirectTo === "/signup") {
-        redirectTo = "/";
-      }
+      if (redirectTo === "") redirectTo = "/";
+
       state.redirect = "";
       window.location.href = redirectTo;
     },
@@ -22,8 +20,12 @@ export const authSlice = createSlice({
       state.token = "";
       state.redirect = action.payload.goto;
     },
+
+    removeToken: (state) => {
+      state.token = "";
+    },
   },
 });
 
-export const { setToken, setRedirectLink } = authSlice.actions;
+export const { setToken, setRedirectLink, removeToken } = authSlice.actions;
 export default authSlice.reducer;

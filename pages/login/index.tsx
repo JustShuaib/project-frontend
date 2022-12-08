@@ -15,7 +15,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { setToken } from "../../services/slices/loginSlice";
+import { setToken } from "../../services/slices";
 import { useLoginMutation } from "../../services/api";
 import { useAppSelector, useAppDispatch } from "../../services/hooks";
 import { Eye, EyeClose } from "../../icons";
@@ -36,6 +36,7 @@ const Login = () => {
     reset,
     formState: { errors },
   } = useForm<FormData>();
+
   const toast = useToast({
     position: "top-right",
     isClosable: true,
@@ -44,38 +45,39 @@ const Login = () => {
     const formData = new FormData();
     formData.append("username", email);
     formData.append("password", password);
+    // TODO: Clear the store on logout
     if (isLoggedIn) {
       toast({
         description: "You are already logged in",
         status: "error",
       });
-    } else {
-      login(formData)
-        .unwrap()
-        .then((res) => {
-          dispatch(setToken(res.access_token));
-          toast({
-            description: "Logged in successfully",
-            status: "success",
-          });
-          reset();
-          setShow(false);
-        })
-        .catch((err) => {
-          console.error(err);
-          if (err.status === "FETCH_ERROR") {
-            toast({
-              description: "Check your internet connection",
-              status: "error",
-            });
-          } else {
-            toast({
-              description: "Invalid username or password",
-              status: "error",
-            });
-          }
-        });
+      return;
     }
+    login(formData)
+      .unwrap()
+      .then((res) => {
+        dispatch(setToken(res.access_token));
+        toast({
+          description: "Logged in successfully",
+          status: "success",
+        });
+        reset();
+        setShow(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.status === "FETCH_ERROR") {
+          toast({
+            description: "Check your internet connection",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "Invalid username or password",
+            status: "error",
+          });
+        }
+      });
   };
   return (
     <Layout title="Login">
@@ -138,7 +140,7 @@ const Login = () => {
               Don&apos;t have an account? <Link href="/signup">Sign up</Link>
             </Text>
             <Link href="/login/forgot-password">Forgot Password?</Link>
-            <Link href="/update-password">Change Password</Link>
+            <Link href="/update-password">Update Password</Link>
           </Flex>
         </Container>
       </Box>

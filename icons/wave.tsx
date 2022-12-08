@@ -4,10 +4,9 @@ const Wave = () => {
     <Icon
       viewBox="0 0 1440 320"
       w="full"
+      pos="relative"
+      bottom="-6"
       h="max-content"
-      // pos="relative"
-      // bottom={0}
-      // left={0}
     >
       <path
         fill="#0099ff"
